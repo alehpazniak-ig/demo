@@ -1,45 +1,60 @@
 package by.calculator.demo.service;
 
-import by.calculator.demo.dao.OperationDAO;
+import by.calculator.demo.dao.IOperationDao;
 import by.calculator.demo.domain.Operation;
-import by.calculator.demo.repository.OperationRepository;
 import by.calculator.demo.util.Calculator;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
 public class OperationService {
-    private final OperationRepository operationRepository;
-    private final OperationDAO operationDAO;
 
-    public double addAndSave(double a, double b) {
+    private final IOperationDao dao;
+
+    public OperationService(IOperationDao operationDAO) {
+        this.dao = operationDAO;
+    }
+
+    public Operation additionAndSave(double a, double b) {
         Operation operation = new Operation();
         double result = Calculator.add(a, b);
-        operation.setId(1);
         operation.setOperationName("addition");
         operation.setArgFirst(a);
         operation.setArgSecond(b);
         operation.setResult(result);
-        operationDAO.addOperation(operation);
-        return result;
+        dao.save(operation);
+        return operation;
     }
 
-    public double multiplyAndSave(double a, double b) {
+    public Operation multiplyAndSave(double a, double b) {
+        Operation operation = new Operation();
         double result = Calculator.multiply(a, b);
-        operationRepository.saveOperation("multiplication", a, b, result);    //todo operationName => ENUM
-        return result;
+        operation.setOperationName("multiply");
+        operation.setArgFirst(a);
+        operation.setArgSecond(b);
+        operation.setResult(result);
+        dao.save(operation);
+        return operation;
     }
 
-    public double subtractAndSave(double a, double b) {
+    public Operation subtractAndSave(double a, double b) {
+        Operation operation = new Operation();
         double result = Calculator.subtract(a, b);
-        operationRepository.saveOperation("subtraction", a, b, result);    //todo operationName => ENUM
-        return result;
+        operation.setOperationName("subtract");
+        operation.setArgFirst(a);
+        operation.setArgSecond(b);
+        operation.setResult(result);
+        dao.save(operation);
+        return operation;
     }
 
-    public double divideAndSave(double a, double b) {
+    public Operation divideAndSave(double a, double b) {
+        Operation operation = new Operation();
         double result = Calculator.divide(a, b);
-        operationRepository.saveOperation("division", a, b, result);    //todo operationName => ENUM
-        return result;
+        operation.setOperationName("divide");
+        operation.setArgFirst(a);
+        operation.setArgSecond(b);
+        operation.setResult(result);
+        dao.save(operation);
+        return operation;
     }
 }
